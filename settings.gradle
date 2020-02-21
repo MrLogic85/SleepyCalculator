@@ -1,0 +1,2 @@
+include ':app', ':geometry'
+rootProject.name='Sleepy Calculator'

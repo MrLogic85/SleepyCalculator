@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_calculator">
+
+    <fragment
+        android:id="@+id/navigation_calculator"
+        android:name="com.sleepyduck.sleepycalculator.ui.calculator.CalculatorFragment"
+        android:label="@string/title_calculator"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_geometry"
+        android:name="com.sleepyduck.sleepycalculator.ui.geometry.GeometryFragment"
+        android:label="@string/title_geometry"
+        tools:layout="@layout/fragment_geometry" />
+
+    <fragment
+        android:id="@+id/navigation_graphs"
+        android:name="com.sleepyduck.sleepycalculator.ui.graphs.GraphsFragment"
+        android:label="@string/title_graphs"
+        tools:layout="@layout/fragment_graphs" />
+</navigation>

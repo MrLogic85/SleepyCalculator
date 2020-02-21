@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Sleepy Calculator</string>
+    <string name="title_calculator">Calculator</string>
+    <string name="title_geometry">Geometry</string>
+    <string name="title_graphs">Graphs</string>
+
+    <string name="a">A</string>
+    <string name="b">B</string>
+    <string name="c">C</string>
+    <string name="alpha">α</string>
+    <string name="beta">β</string>
+    <string name="gamma">γ</string>
+    <string name="ax">Ax</string>
+    <string name="ay">Ay</string>
+    <string name="bx">Bx</string>
+    <string name="by">By</string>
+    <string name="cx">Cx</string>
+    <string name="cy">Cy</string>
+    <string name="area">Area</string>
+    <string name="height">Height</string>
+
+    <string name="length">Length</string>
+    <string name="angle">Angle in degrees</string>
+    <string name="above_bottom">Distance above bottom</string>
+    <string name="right_of_edge">Distance to the right of start edge</string>
+    <string name="height_description">Distance from line A to point A</string>
+</resources>
