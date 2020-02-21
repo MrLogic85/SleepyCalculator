@@ -79,11 +79,20 @@ private const val TAG_CALCULATED = "calculated"
 
 private fun TextInputLayout.setCalcValue(value: Double?) {
     when {
-        editText?.text.isNullOrBlank() && value != null -> {
+        (editText?.text.isNullOrBlank() || tag == TAG_CALCULATED) && value != null -> {
             editText?.isEnabled = false
             tag = TAG_CALCULATED
+            isErrorEnabled = false
             editText?.let { TextViewCompat.setTextAppearance(it, R.style.TextAppearanceCalculated) }
-            editText?.setText("${round(value * 1000.0) / 1000.0}")
+            editText?.setText(value.trim())
+        }
+
+        editText?.text?.isNotEmpty() == true && tag != TAG_CALCULATED && value != null && value.trim() != editText?.text.toDouble()?.trim() -> {
+            error = value.trim()
+        }
+
+        editText?.text?.isNotEmpty() == true && tag != TAG_CALCULATED && value != null -> {
+            isErrorEnabled = false
         }
 
         value == null && tag == TAG_CALCULATED -> {
@@ -92,20 +101,26 @@ private fun TextInputLayout.setCalcValue(value: Double?) {
             editText?.let { TextViewCompat.setTextAppearance(it, R.style.TextAppearance) }
             editText?.isEnabled = true
         }
+
+        value == null -> {
+            isErrorEnabled = false
+        }
     }
 }
 
 private fun TextInputLayout.applyValue(value: Double?, apply: (Double?) -> Boolean) {
     when {
-        tag != TAG_CALCULATED -> if (apply(value) || value == null) {
-            isErrorEnabled = false
-        } else {
+        tag != TAG_CALCULATED -> if (!apply(value) && value != null) {
             error = "Invalid value"
+        } else if (error == "Invalid value") {
+            isErrorEnabled = false
         }
     }
 }
 
 private fun AppCompatEditText.setText(value: Double?) = setText(if (value != null) "$value" else "")
+
+private fun Double.trim(): String = "${round(this * 10000.0) / 10000.0}"
 
 private fun Editable?.toDouble(): Double? = try {
     this.toString().toDouble()

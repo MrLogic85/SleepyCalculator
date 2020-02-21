@@ -170,6 +170,21 @@ class GeometryViewModel : ViewModel() {
             _calculatedBy.value = triangle.by
             _calculatedCx.value = triangle.cx
             _calculatedCy.value = triangle.cy
+        } else {
+            _calculatedA.value = null
+            _calculatedB.value = null
+            _calculatedC.value = null
+            _calculatedAlpha.value = null
+            _calculatedBeta.value = null
+            _calculatedGamma.value = null
+            _calculatedArea.value = null
+            _calculatedHeight.value = null
+            _calculatedAx.value = null
+            _calculatedAy.value = null
+            _calculatedBx.value = null
+            _calculatedBy.value = null
+            _calculatedCx.value = null
+            _calculatedCy.value = null
         }
 
         return triangle.isValid

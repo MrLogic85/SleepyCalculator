@@ -42,20 +42,20 @@ class Triangle(
 
     init {
         for (i in 0..13) {
-            if (a == null) a = calcSide(alpha, gamma, beta, b, c, area, height, Point(ax, ay), Point(cx, cy), Point(bx, by))
-            if (b == null) b = calcSide(beta, alpha, gamma, c, a, area, null, Point(bx, by), Point(ax, ay), Point(cx, cy))
-            if (c == null) c = calcSide(gamma, beta, alpha, a, b, area, null, Point(cx, cy), Point(ax, ay), Point(bx, by))
-            if (alpha == null) alpha = calcAngle(beta, gamma, a, c, b, area, height, Point(ax, ay), Point(bx, by), Point(cx, cy))
-            if (beta == null) beta = calcAngle(gamma, alpha, b, a, c, area, null, Point(bx, by), Point(cx, cy), Point(ax, ay))
-            if (gamma == null) gamma = calcAngle(alpha, beta, c, b, a, area, null, Point(cx, cy), Point(ax, ay), Point(bx, by))
-            if (area == null) area = calcArea(alpha, beta, c, b, a, area, height, Point(cx, cy), Point(ax, ay), Point(bx, by))
-            if (height == null) height = calcHeight(a, b, c, alpha, beta, gamma, area, Point(ax, ay), Point(bx, by), Point(cx, cy))
-            if (ax == null) ax = calcPoint(Point(bx, by), Point(cx, cy), a, c, b, alpha, beta, gamma, area, height)?.x
-            if (ay == null) ay = calcPoint(Point(bx, by), Point(cx, cy), a, c, b, alpha, beta, gamma, area, height)?.y
-            if (bx == null) bx = calcPoint(Point(cx, cy), Point(ax, ay), b, a, c, beta, gamma, alpha, area, null)?.x
-            if (by == null) by = calcPoint(Point(cx, cy), Point(ax, ay), b, a, c, beta, gamma, alpha, area, null)?.y
-            if (cx == null) cx = calcPoint(Point(ax, ay), Point(bx, by), c, b, a, gamma, alpha, beta, area, null)?.x
-            if (cy == null) cy = calcPoint(Point(ax, ay), Point(bx, by), c, b, a, gamma, alpha, beta, area, null)?.y
+            /* if (a == null) */ a = calcSide(alpha, gamma, beta, b, c, area, height, Point(ax, ay), Point(cx, cy), Point(bx, by)) ?: a
+            /* if (b == null) */ b = calcSide(beta, alpha, gamma, c, a, area, null, Point(bx, by), Point(ax, ay), Point(cx, cy)) ?: b
+            /* if (c == null) */ c = calcSide(gamma, beta, alpha, a, b, area, null, Point(cx, cy), Point(ax, ay), Point(bx, by)) ?: c
+            /* if (alpha == null) */ alpha = calcAngle(beta, gamma, a, c, b, area, height, Point(ax, ay), Point(bx, by), Point(cx, cy)) ?: alpha
+            /* if (beta == null) */ beta = calcAngle(gamma, alpha, b, a, c, area, null, Point(bx, by), Point(cx, cy), Point(ax, ay)) ?: beta
+            /* if (gamma == null) */ gamma = calcAngle(alpha, beta, c, b, a, area, null, Point(cx, cy), Point(ax, ay), Point(bx, by)) ?: gamma
+            /* if (area == null) */ area = calcArea(a, b, c, alpha, beta, gamma, height, Point(cx, cy), Point(ax, ay), Point(bx, by)) ?: area
+            /* if (height == null) */ height = calcHeight(a, b, c, alpha, beta, gamma, area, Point(ax, ay), Point(bx, by), Point(cx, cy)) ?: height
+            /* if (ax == null) */ ax = calcPoint(Point(ax, ay), Point(bx, by), Point(cx, cy), a, c, b, alpha, beta, gamma, area, height)?.x ?: ax
+            /* if (ay == null) */ ay = calcPoint(Point(ax, ay), Point(bx, by), Point(cx, cy), a, c, b, alpha, beta, gamma, area, height)?.y ?: ay
+            /* if (bx == null) */ bx = calcPoint(Point(bx, by), Point(cx, cy), Point(ax, ay), b, a, c, beta, gamma, alpha, area, null)?.x ?: bx
+            /* if (by == null) */ by = calcPoint(Point(bx, by), Point(cx, cy), Point(ax, ay), b, a, c, beta, gamma, alpha, area, null)?.y ?: by
+            /* if (cx == null) */ cx = calcPoint(Point(cx, cy), Point(ax, ay), Point(bx, by), c, b, a, gamma, alpha, beta, area, null)?.x ?: cx
+            /* if (cy == null) */ cy = calcPoint(Point(cx, cy), Point(ax, ay), Point(bx, by), c, b, a, gamma, alpha, beta, area, null)?.y ?: cy
             if (listOf(a, b, c, alpha, beta, gamma, area, height, ax, ay, bx, by, cx, cy).filter { it == null }.count() == 0) break
         }
     }
@@ -143,12 +143,15 @@ private fun calcHeight(
     pointB: Point,
     pointC: Point
 ): Double? = when {
-    pointC.y.isNum() && pointB.y == pointC.y && pointA.y.isNum() -> pointA.y
+    //pointC.y.isNum() && pointB.y == pointC.y && pointA.y.isNum() -> pointA.y
     area.isNum() && a.isPos() -> 2.0 * area / a // area = 1/2 bh
+    area.isNum() && b.isPos() -> 2.0 * area / b // area = 1/2 bh
+    area.isNum() && c.isPos() -> 2.0 * area / c // area = 1/2 bh
     else -> null
 }
 
 private fun calcPoint(
+    self: Point,
     left: Point,
     right: Point,
     oppositeSide: Double?,
@@ -163,14 +166,32 @@ private fun calcPoint(
     right.x.isNum() && right.y.isNum() && left.x.isNum() && left.y.isNum() && height.isNum() && rightSide.isNum() -> {
         val oppositeVec = Vector(left.x - right.x, left.y - right.y).normal
         val heightVec = oppositeVec.orthogonal * height
-        val oppositeVecToOrtho = oppositeVec * sqrt(square(rightSide) - sqrt(height))
+        val oppositeVecToOrtho = oppositeVec * sqrt(square(rightSide) - square(height))
         (right.toVector() + oppositeVecToOrtho + heightVec).toPoint()
     }
     right.x.isNum() && right.y.isNum() && left.x.isNum() && left.y.isNum() && height.isNum() && leftSide.isNum() -> {
         val oppositeVec = Vector(left.x - right.x, left.y - right.y).normal
         val heightVec = oppositeVec.orthogonal * height
-        val oppositeVecToOrtho = -oppositeVec * sqrt(square(leftSide) - sqrt(height))
+        val oppositeVecToOrtho = -oppositeVec * sqrt(square(leftSide) - square(height))
         (left.toVector() + oppositeVecToOrtho + heightVec).toPoint()
+    }
+    left.x.isNum() && left.y.isNum() && right.x.isNum() && right.y.isNum() && self.x.isNum() && rightAngle.isNum() -> {
+        val sin = sin(DEG_TO_RAD * rightAngle)
+        val cos = cos(DEG_TO_RAD * rightAngle)
+        val leftX = self.x - right.x
+        val oppX = left.x - right.x
+        val oppY = left.y - right.y
+        if (cos * oppX - sin * oppY != 0.0) Point(self.x, leftX * (sin * oppX + cos * oppY) / (cos * oppX - sin * oppY) + right.y)
+        else null
+    }
+    left.x.isNum() && left.y.isNum() && right.x.isNum() && right.y.isNum() && self.y.isNum() && rightAngle.isNum() -> {
+        val sin = sin(DEG_TO_RAD * rightAngle)
+        val cos = cos(DEG_TO_RAD * rightAngle)
+        val leftY = self.y - right.y
+        val oppX = left.x - right.x
+        val oppY = left.y - right.y
+        if (sin * oppX + cos * oppY != 0.0) Point(leftY * (cos * oppX - sin * oppY) / (sin * oppX + cos * oppY) + right.x, self.y)
+        else null
     }
     else -> null
 }

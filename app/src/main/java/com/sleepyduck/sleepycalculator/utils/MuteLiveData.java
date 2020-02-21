@@ -16,8 +16,8 @@ public class MuteLiveData<T> extends MutableLiveData<T> {
 
     @Override
     public void setValue(@Nullable T value) {
-        if (!Objects.equals(getValue(), value)) {
+        //if (!Objects.equals(getValue(), value)) {
             super.setValue(value);
-        }
+       // }
     }
 }
